@@ -27,7 +27,6 @@
 #' 
 #' 
 #' 
-
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
                       conf.interval=.95, .drop=TRUE) {
     require(plyr)
