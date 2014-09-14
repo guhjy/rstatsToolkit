@@ -1,32 +1,22 @@
-#' Summarize means and standard errors of the mean
-#'
-#' Calculates the sample size, mean, standard deviation, standard
-#' error of the mean, and the confidence interval
-#'
-#' I took this function on 2014-01-21 from the website
-#' \url{http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_%28ggplot2%29/#Helper%20functions}. It
-#' basically summarizes the provided data by giving count, mean,
-#' standard deviation, standard error of the mean, and confidence
-#' interval (default 95%).
-#'
-#' The dependencies are \pkg{plyr}
-#'
-#' @param data A dataset (dataframe) that contains the values to be summarized
-#' @param measurevar The name of a column that contains the variable to be summarized
-#' @param groupvars A vector containing names of columns that contain grouping variables
-#' @param na.rm A binary (boolean) response that indicates whether to
-#' ignore missing (NA) data
-#' @param conf.interval Percent range of the confidence interval
-#' @return Outputs a dataframe that contains the summarized statistics (means, etc.)
-#' @keywords summarize means SD SE \pkg{plyr}
-#' @author Cookbook R
-#' @export
-#' @examples
-#' 
-#' 
-#' 
-#' 
-#' 
+##' Calculates the sample size, mean, standard deviation, standard
+##' error of the mean, and the confidence interval of specified
+##' variables.
+##'
+##' I took this function on 2014-01-21 from the website
+##' \url{http://www.cookbook-r.com/Graphs}.  It basically summarizes
+##' the provided data by giving count, mean, standard deviation,
+##' standard error of the mean, and confidence interval (default 95%).
+##' The dependencies are \pkg{plyr}
+##'
+##' @title Summarize means and standard errors of the mean
+##' @param data A dataset (dataframe) that contains the values to be summarized
+##' @param measurevar The name of a column that contains the variable to be summarized
+##' @param groupvars A vector containing names of columns that contain grouping variables
+##' @param na.rm A binary (boolean) response that indicates whether to
+##' ignore missing (NA) data
+##' @param conf.interval Percent range of the confidence interval
+##' @return Outputs a dataframe that contains the summarized statistics (means, etc.)
+##' @author Cookbook R
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
                       conf.interval=.95, .drop=TRUE) {
     require(plyr)
