@@ -4,11 +4,11 @@ Version: 0.1
 Authors@R: "Luke W Johnston <lwjohnst@gmail.com> [aut, cre]"
 Description: This package is mainly my personal collection of code that I commonly use in my research and statistical analysis.  Eventually I would like to develop it into a toolkit that other graduate students (I'm a graduate student right now btw) and in the future for my own graduate students to use and develop.  Until that point, I am slowly developing this package into toolkit for analyzing and exploring data.
 Imports:
-    ggplot2 >= 1.0.0
-    plyr >= 1.8.1
-    grid >= 3.1.1
-    visreg >= 2.0.5
-    reshape2 >= 1.4
+    ggplot2 (>= 1.0.0),
+    plyr (>= 1.8.1),
+    grid (>= 3.1.1),
+    visreg (>= 2.0.5),
+    reshape2 (>= 1.4)
 Depends:
     R (>= 3.1.1)
 License: Creative Commons 0
