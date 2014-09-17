@@ -12,7 +12,7 @@
 ##' ## This creates a white theme
 ##' theme_white()
 ##' 
-theme_white <- function() {
+themeWhite <- function() {
     require(ggplot2)
     theme_update(panel.background = element_blank(),
                  panel.grid.major = element_blank(),
