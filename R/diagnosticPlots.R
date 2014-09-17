@@ -22,6 +22,7 @@
 ##' confounding variables
 ##' @return Outputs multiple plots and textplots with diagnostic
 ##' information
+##' @export
 ##' @author Luke Johnston
 diagnosticPlots <- function(data, y, x, covar){
 

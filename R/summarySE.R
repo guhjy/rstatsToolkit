@@ -16,6 +16,7 @@
 ##' ignore missing (NA) data
 ##' @param conf.interval Percent range of the confidence interval
 ##' @return Outputs a dataframe that contains the summarized statistics (means, etc.)
+##' @export
 ##' @author Cookbook R
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
                       conf.interval=.95, .drop=TRUE) {

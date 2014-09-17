@@ -19,6 +19,7 @@
 ##' @param xlabel The x-axis label
 ##' @param ... Other options. In development
 ##' @return Outputs a plot of the regression model
+##' @export
 ##' @author Luke Johnston
 plotVisreg <- function(data, y, x, covar, ylabel = x, xlabel = y, ...) {
 

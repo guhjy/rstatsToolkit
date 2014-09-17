@@ -29,6 +29,7 @@
 ##' @param ... Potential options to add. In development
 ##' @return Outputs a plot object
 ##' @author Luke Johnston
+##' @export
 ##' @examples
 ##' 
 ##' xlabs <- list("X Name" = "x1", "X Name Two!" = "x2" ... )

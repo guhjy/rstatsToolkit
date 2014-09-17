@@ -7,6 +7,7 @@
 ##' 
 ##' @title Custom white ggplot theme
 ##' @author Luke Johnston
+##' @export
 ##' @examples
 ##' 
 ##' ## This creates a white theme

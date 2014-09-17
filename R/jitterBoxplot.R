@@ -22,6 +22,7 @@
 ##' @param ylab The y-axis label
 ##' @return Outputs the plot object
 ##' @author Luke Johnston
+##' @export
 ##' @examples
 ##' 
 ##' varnames <- list("Name of X1" = "X1", "Name of X2" = "X2", ...)

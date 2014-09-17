@@ -21,8 +21,9 @@
 ##' example, if layout = matrix(c(1, 2, 3, 3), nrow = 2, byrow = TRUE)
 ##' the result would have plot 1 in the upper left, plot 2 in the upper
 ##' right, and plot 3 would be go across the bottom
+##' @export
 ##' @author Cookbook R
-multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+multiPlot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   require(grid)
 
   ## Make a list from the ... arguments and plotlist
