@@ -23,9 +23,9 @@
 ##' @param lo.color Color of negative correlation coefficients
 ##' @param hi.color Color of positive correlation coefficients
 ##' @param rm.legend In development. Goal is it will remove the legend
-##' @param matrix.sty In development. Goal is to select whether the
-##' heatmap will be a matrix style (the same variable on the x- and y-
-##' axis) or non-matrix
+##' @param matrix.sty Select whether the heatmap will be a matrix
+##' style (the same variable on the x- and y- axis) or non-matrix
+##' (different variables on both axes)
 ##' @param ... Potential options to add. In development
 ##' @return Outputs a plot object
 ##' @author Luke Johnston
