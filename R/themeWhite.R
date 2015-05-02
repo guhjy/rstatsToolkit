@@ -11,7 +11,7 @@
 ##' @examples
 ##' 
 ##' ## This creates a white theme
-##' theme_white()
+##' themeWhite()
 ##' 
 themeWhite <- function() {
     require(ggplot2)
@@ -20,7 +20,7 @@ themeWhite <- function() {
                  panel.grid.minor = element_blank(),
                  panel.border = element_blank(),
                  axis.line = element_line(colour = "black"),
-                 axis.text.x=element_text(colour="black"),
-                 axis.text.y=element_text(colour="black")
+                 axis.text = element_text(colour = "black"),
+                 axis.ticks = element_line(colour = "black")
                  )
 }
