@@ -33,9 +33,12 @@ commands :
 
 ## install    : Update the documentation and install the R package.
 install :
+	@Rscript install.R
+
+## doc_pdf    : Create or update the pdf documentation
+doc_pdf :
 	@R CMD Rd2pdf --no-preview --force --batch \
 		--output=doc/rstatsToolkit.pdf \
 		$(R_PKG_DIR)/rstatsToolkit
-	@Rscript -e 'library(devtools);library(roxygen2);library(methods);document();install("../rstatsToolkit")'
 
 
