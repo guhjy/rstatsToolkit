@@ -9,11 +9,14 @@ Description: This package is mainly my personal collection of code that I
     students to use and develop.  Until that point, I am slowly developing this
     package into toolkit for analyzing and exploring data.
 Imports:
+    gee (>= 4.13.18),
+    magrittr,
+    data.table (>= 1.9.4),
     ggplot2 (>= 1.0.0),
-    plyr (>= 1.8.1),
     grid (>= 3.1.1),
     visreg (>= 2.0.5),
-    reshape2 (>= 1.4)
+    reshape2 (>= 1.4),
+    dplyr (>= 0.4.1)
 Depends:
     R (>= 3.1.1)
 License: Creative Commons 0
