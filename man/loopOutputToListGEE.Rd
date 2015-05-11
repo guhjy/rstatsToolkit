@@ -49,6 +49,8 @@ them!  For documentation on the function to create the formula
 list, see \code{\link{createFormulaList}}.
 }
 \examples{
+data(state)
+
 ## Very simple test example.  Merely to show how the function is used.
 outcomes <- c('Income', 'Population')
 exposures <- c('Frost', 'Illiteracy')

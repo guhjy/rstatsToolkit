@@ -25,6 +25,8 @@ converts the beta estimate and associated statistics into list of
 dataframes.
 }
 \examples{
+data(state)
+
 ## Very simple test example.  Merely to show how the function is used.
 outcomes <- c('Income', 'Population')
 exposures <- c('Frost', 'Illiteracy')

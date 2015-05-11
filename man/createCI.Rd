@@ -29,6 +29,8 @@ Generate confidence intervals (upper and lower) and p-values from
 a regression (e.g. GEE or GLM).
 }
 \examples{
+data(state)
+
 ## Very simple test example.  Merely to show how the function is used.
 outcomes <- c('Income', 'Population')
 exposures <- c('Frost', 'Illiteracy')

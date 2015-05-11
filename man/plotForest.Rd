@@ -5,11 +5,11 @@
 \title{Forest plot}
 \usage{
 plotForest(data, coeff = coefficient, yvar = y.variables.column,
-  ylab = yaxis.label, xlab = xaxis.label, ci = confid.interval,
+  ylab = y.axis.label, xlab = x.axis.label, ci = confid.interval,
   dot.pval = pvalue.factor.column, coefficient = "Estimate",
   y.variables.column = "indep", confid.interval = c("lowerCI", "upperCI"),
-  pvalue.factor.column = "NULL", groups = NULL, yaxis.label = "Exposures",
-  xaxis.label = "Beta estimate")
+  pvalue.factor.column = "NULL", groups = NULL,
+  y.axis.label = "Exposures", x.axis.label = "Beta estimate")
 }
 \arguments{
 \item{data}{Dataset for the forest plot.}
@@ -29,9 +29,9 @@ p-value in the form of a factor variable (ie. with levels such as
 
 \item{groups}{The variable to split the plot up.}
 
-\item{yaxis.label,ylab}{The y-axis label.}
+\item{y.axis.label,ylab}{The y-axis label.}
 
-\item{xaxis.label,xlab}{The x-axis label.}
+\item{x.axis.label,xlab}{The x-axis label.}
 }
 \value{
 A forest plot
@@ -50,11 +50,12 @@ amount of information on the results can be provided in a fairly
 small amount of space.
 }
 \examples{
+data(state)
+
 ## Very simple test example.  Merely to show how the function is used.
 outcomes <- c('Income', 'Population')
 exposures <- c('Frost', 'Illiteracy')
 covariates <- c('Murder', 'LifeExp')
-interaction <- 'LifeExp'
 
 ## This uses the dplyr package.
 ds <- cbind(state.region, state.x77) \%>\%

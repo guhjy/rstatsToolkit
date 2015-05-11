@@ -32,6 +32,8 @@ Afterward, the dataset gets filtered by the variables of interest
 (eg. the exposures) that are contained within the 'indep' column.
 }
 \examples{
+data(state)
+
 ## Very simple test example.  Merely to show how the function is used.
 outcomes <- c('Income', 'Population')
 exposures <- c('Frost', 'Illiteracy')
