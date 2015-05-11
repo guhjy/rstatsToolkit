@@ -11,6 +11,7 @@ Description: This package is mainly my personal collection of code that I
 Imports:
     gee (>= 4.13.18),
     magrittr,
+    broom,
     data.table (>= 1.9.4),
     ggplot2 (>= 1.0.0),
     grid (>= 3.1.1),
