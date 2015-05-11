@@ -6,6 +6,6 @@
 #' @import dplyr
 #' @import gee
 #' @import broom
-#' @import data.table
+#' @importFrom data.table rbindlist
 #' @import reshape2
 NULL
