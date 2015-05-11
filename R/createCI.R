@@ -13,6 +13,8 @@
 ##' @return Columns with the confidence interval and p-value.
 ##' @author Luke W. Johnston
 ##' @examples
+##'
+##' data(state)
 ##' 
 ##' ## Very simple test example.  Merely to show how the function is used.
 ##' outcomes <- c('Income', 'Population')

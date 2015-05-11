@@ -21,6 +21,8 @@
 ##' @author Luke W. Johnston
 ##' @export
 ##' @examples
+##'
+##' data(state)
 ##' 
 ##' ## Very simple test example.  Merely to show how the function is used.
 ##' outcomes <- c('Income', 'Population')

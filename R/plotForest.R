@@ -20,18 +20,19 @@
 ##' p-value in the form of a factor variable (ie. with levels such as
 ##' '>0.05' and '<0.05').
 ##' @param groups The variable to split the plot up.
-##' @param yaxis.label,ylab The y-axis label.
-##' @param xaxis.label,xlab The x-axis label.
+##' @param y.axis.label,ylab The y-axis label.
+##' @param x.axis.label,xlab The x-axis label.
 ##' @export
 ##' @return A forest plot
 ##' @author Luke W. Johnston
 ##' @examples
+##'
+##' data(state)
 ##' 
 ##' ## Very simple test example.  Merely to show how the function is used.
 ##' outcomes <- c('Income', 'Population')
 ##' exposures <- c('Frost', 'Illiteracy')
 ##' covariates <- c('Murder', 'LifeExp')
-##' interaction <- 'LifeExp'
 ##' 
 ##' ## This uses the dplyr package.
 ##' ds <- cbind(state.region, state.x77) %>%
@@ -50,23 +51,23 @@
 ##'   plotForest(., dot.pval = 'f.pvalue', groups = 'dep')
 ##' 
 plotForest <- function(data, coeff = coefficient, yvar = y.variables.column,
-                       ylab = yaxis.label, xlab = xaxis.label,
+                       ylab = y.axis.label, xlab = x.axis.label,
                        ci = confid.interval, dot.pval = pvalue.factor.column,
                        coefficient = 'Estimate',
                        y.variables.column = 'indep',
                        confid.interval = c('lowerCI', 'upperCI'),
                        pvalue.factor.column = 'NULL', groups = NULL,
-                       yaxis.label = 'Exposures',
-                       xaxis.label = 'Beta estimate') {
+                       y.axis.label = 'Exposures',
+                       x.axis.label = 'Beta estimate') {
 
     ## Make sure each argument has the same values.
     if (coeff != coefficient | yvar != y.variables.column |
-        ylab != yaxis.label | xlab != xaxis.label | (ci != confid.interval)[1] |
+        ylab != y.axis.label | xlab != x.axis.label | (ci != confid.interval)[1] |
         dot.pval != pvalue.factor.column) {
         coefficient <- coeff
         y.variables.column <- yvar
-        yaxis.label <- ylab
-        xaxis.label <- xlab
+        y.axis.label <- ylab
+        x.axis.label <- xlab
         confid.interval <- ci
         pvalue.factor.column <- dot.pval
     }
@@ -79,7 +80,7 @@ plotForest <- function(data, coeff = coefficient, yvar = y.variables.column,
                                 alpha = pvalue.factor.column),
                      height = 0) +
       geom_vline(xintercept = 0, linetype = 'dashed') +
-      labs(y = yaxis.label, x = xaxis.label) +
+      labs(y = y.axis.label, x = x.axis.label) +
       theme_bw()
 
     ## Change the size of the dot and line based on significance.
