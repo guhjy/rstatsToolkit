@@ -11,6 +11,7 @@
 ##' @param sig.level The significance level for calculating the
 ##' confidence interval.
 ##' @return Columns with the confidence interval and p-value.
+##' @export
 ##' @author Luke W. Johnston
 ##' @examples
 ##'
@@ -68,5 +69,5 @@ createCI <- function(data, dist = test.distribution,
              ) %>%
       mutate(f.pvalue = cut(pvalue, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
                              labels = c('<0.001', '<0.01', '<0.05', '>0.05'),
-                             ordered_result = TRUE) %>% factor(., levels = unique(rev(.))))
+                             ordered_result = TRUE) %>% factor(., levels = rev(levels(.))))
 }
