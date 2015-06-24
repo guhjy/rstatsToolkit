@@ -24,7 +24,7 @@
 ##' @export
 ##' @author Cookbook R
 multiPlot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
-  require(grid)
+    ## Uses grid
 
   ## Make a list from the ... arguments and plotlist
   plots <- c(list(...), plotlist)

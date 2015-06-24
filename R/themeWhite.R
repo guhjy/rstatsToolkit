@@ -14,7 +14,6 @@
 ##' themeWhite()
 ##' 
 themeWhite <- function() {
-    require(ggplot2)
     theme_update(panel.background = element_blank(),
                  panel.grid.major = element_blank(),
                  panel.grid.minor = element_blank(),
