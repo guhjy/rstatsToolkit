@@ -55,7 +55,7 @@ plotHeatmapCorr <- function(data, x, y = NULL, x.name.sub, y.name.sub,
     if (length(y) == 0) {
         warning('This may be buggy; make sure that the plot is as expected (no missing variables).',
                 call. = FALSE)
-        corData <- cor(data[, x], use = 'pairwise.complete.obs',
+        corData <- cor(data[, x], use = 'complete.obs',
                        method = 'spearman') %>%
           melt() %>%
           ## If x.name.sub has something assigned to it, this is where
@@ -85,12 +85,42 @@ confirm, set "print.corr.values" to TRUE.', call. = FALSE)
         print(corData)
     }
 
+    p <- plotHeatmap(corData, x = 'Var1', y = 'Var2', heat.colours = heat.colours,
+                     show.corr.values = show.corr.values, ylab = y.axis.label,
+                     y.axis.label = y.axis.label, xlab = x.axis.label,
+                     x.axis.label = x.axis.label)
+
+    return(p)
+
+}
+##' Create a heatmap.
+##'
+##' Used with \code{\link{plotHeatmapCorr}}.
+##' @title Heatmap
+##' @inheritParams plotHeatmapCorr
+##' @return Heatmap
+##' @export
+##' @author Luke W. Johnston
+plotHeatmap <- function(data, x = 'Var1', y = 'Var2', 
+                        heat.colours = c('darkorange2', 'skyblue4'),
+                        show.corr.values = TRUE,
+                        ylab = y.axis.label,
+                        xlab = x.axis.label, 
+                        y.axis.label = NULL,
+                        x.axis.label = NULL) {
+    ## This function uses dplyr, ggplot2, and reshape2 packages.
+
+    if ( !is.null(ylab) | !is.null(xlab) ) {
+        x.axis.label <- xlab
+        y.axis.label <- ylab
+    }
+
     ## Color Palette for the heatmap
     ltom <- colorRampPalette(c(heat.colours[1], "white"))
     mtoh <- colorRampPalette(c("white", heat.colours[2]))
 
     ## Main plot
-    p <- ggplot(corData, aes(x = Var1, y = Var2)) +
+    p <- ggplot(data, aes_string(x = x, y = y)) +
       geom_tile(aes(fill = value)) +
       scale_fill_gradient(name=expression("Spearman" * ~ rho),
                           low = ltom(100), high = mtoh(100),
