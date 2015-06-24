@@ -16,6 +16,7 @@
 ##' participant in a longitudinal setting.
 ##' @param y.axis.limits Limits of the y-axis.  Must be two numbers.
 ##' @author Luke W. Johnston
+##' @export
 ##' @examples
 ##'
 ##' data(state)
@@ -52,7 +53,7 @@ plotSmoothingANOVA <- function(data, x, y, id, y.axis.limits = c(0.20, 0.80)) {
                  tidy() %>%
                  head(1)['p.value'] %>%
                  round(3) %>%
-                 { ifelse(. < 0.001, paste0('P < 0.001'), paste0('P = ', .)) },
+                 { ifelse(. < 0.001, paste0('p < 0.001'), paste0('p = ', .)) },
                x = Inf, y = quantile(data[[y]], 0.65, na.rm = TRUE),
                hjust = 1, vjust = 1)
 
