@@ -4,23 +4,23 @@
 \alias{plotManhattanStyle}
 \title{Manhattan style plot}
 \usage{
-plotManhattanStyle(data, x, y, groups = NULL, x.axis.label = "Exposures")
+plotManhattanStyle(data, y, x, groups = NULL, y.axis.label = "Exposures")
 }
 \arguments{
 \item{data}{Dataset from a regression with the p-values.}
 
-\item{x}{The column in the dataset that contains the independent
+\item{y}{The column in the dataset that contains the independent
 variables and/or the interaction variables.  Must be as a
 character/string.}
 
-\item{y}{The column that contains the p-value data.  The argument
+\item{x}{The column that contains the p-value data.  The argument
 must be a character/string.}
 
 \item{groups}{The column that splits the tests up, usually is the
 dependent variable if the data has been looped through a
 regression test (eg. see \code{\link{loopOutputToListGEE}}).}
 
-\item{x.axis.label}{The label for the x-axis.}
+\item{y.axis.label}{The label for the y-axis.}
 }
 \description{
 Generates a plot similar to the GWAS Manhattan plots, which are

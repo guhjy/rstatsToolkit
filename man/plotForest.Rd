@@ -4,74 +4,62 @@
 \alias{plotForest}
 \title{Forest plot}
 \usage{
-plotForest(data, coeff = coefficient, yvar = y.variables.column,
-  ylab = y.axis.label, xlab = x.axis.label, ci = confid.interval,
-  dot.pval = pvalue.factor.column, coefficient = "Estimate",
-  y.variables.column = "indep", confid.interval = c("lowerCI", "upperCI"),
-  pvalue.factor.column = "NULL", groups = NULL,
-  y.axis.label = "Exposures", x.axis.label = "Beta estimate")
+plotForest(data, coefficient = "estimate", y.axis.variables = "indep",
+  confid.interval = c("conf.low", "conf.high"), pvalue.factor = NULL,
+  groups = NULL, y.axis.label = "Exposures",
+  x.axis.label = "Beta estimates")
 }
 \arguments{
 \item{data}{Dataset for the forest plot.}
 
-\item{coefficient,coeff}{The column that contains the beta
+\item{coefficient}{The column that contains the beta
 estimate/coefficient.}
 
-\item{y.variables.column,yvar}{The column with the exposure
-variables that will be places on the y-axis of the forest plot.}
+\item{y.axis.variables}{The column with the exposure variables
+that will be placed on the y-axis of the forest plot.}
 
-\item{confid.interval,ci}{A vector that contains the lower and
+\item{confid.interval}{A vector that contains the lower and
 upper confidence interval.}
 
-\item{pvalue.factor.column,dot.pval}{The column that contains the
-p-value in the form of a factor variable (ie. with levels such as
-'>0.05' and '<0.05').}
+\item{pvalue.factor}{The column that contains the p-value in the
+form of a factor variable (ie. with levels such as '>0.05' and
+'<0.05').}
 
-\item{groups}{The variable to split the plot up.}
+\item{groups}{The variable to split the plot up, as a formula
+(var1 ~ var2, or ~ var2, etc).}
 
-\item{y.axis.label,ylab}{The y-axis label.}
+\item{y.axis.label}{The y-axis label.}
 
-\item{x.axis.label,xlab}{The x-axis label.}
+\item{x.axis.label}{The x-axis label.}
 }
 \value{
 A forest plot
 }
 \description{
-Generate a forest plot without the traditional side table .
+Generate a forest plot without the traditional side table.
 }
 \details{
-Create a forest plot, with a dot and 95% confidence line, though
+Create a forest plot, with a dot and confidence line, though
 without the usual side table that contains the raw data values.
-If the \code{dot.pval} argument is supplied, the dots and
+If the \code{pvalue.factor} argument is supplied, the dots and
 confidence lines increase in size and opacity as significance
 increases.  If \code{groups} is also supplied, the forest plot
-will be split up vertically for each grouping.  Thus, a large
-amount of information on the results can be provided in a fairly
-small amount of space.
+will be split up for each grouping.  Thus, a large amount of
+information on the results can be provided in a fairly small
+amount of space.
 }
 \examples{
+\dontrun{
 data(state)
+ds <- data.frame(state.region, state.x77)
+geefit <- loopGEE(ds, c('Income', 'Frost'), c('Population', 'Murder'), 'state.region')
+  filter(term == 'independent') \%>\%
+filtered <- dplyr::filter(geefit, term == 'independent')
 
-## Very simple test example.  Merely to show how the function is used.
-outcomes <- c('Income', 'Population')
-exposures <- c('Frost', 'Illiteracy')
-covariates <- c('Murder', 'LifeExp')
-
-## This uses the dplyr package.
-ds <- cbind(state.region, state.x77) \%>\%
-  as.data.frame() \%>\%
-  rename(LifeExp = `Life Exp`,
-         ## Need to rename the id variable to SID (see description
-         ## above)
-         SID = state.region) \%>\%
-  arrange(SID)
-
-loopOutputToListGEE(ds, outcomes, exposures, covariates,
-                    corstr = 'exchangeable') \%>\%
-  extractBetaFromListGEE() \%>\%
-  unlistAndFilterIndep(., exposures) \%>\%
-  createCI() \%>\%
-  plotForest(., dot.pval = 'f.pvalue', groups = 'dep')
+plotForest(filtered)
+plotForest(filtered, groups = ' ~ dep')
+plotForest(filtered, pvalue.factor = 'f.pvalue', groups = ' ~ dep')
+}
 }
 \author{
 Luke W. Johnston
