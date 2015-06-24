@@ -1,6 +1,6 @@
 Package: rstatsToolkit
 Title: Bundles up all my most used functions for doing statistical analysis
-Version: 0.1
+Version: 0.2.0.9000
 Authors@R: "Luke W Johnston <lwjohnst@gmail.com> [aut, cre]"
 Description: This package is mainly my personal collection of code that I
     commonly use in my research and statistical analysis.  Eventually I would
@@ -9,7 +9,7 @@ Description: This package is mainly my personal collection of code that I
     students to use and develop.  Until that point, I am slowly developing this
     package into toolkit for analyzing and exploring data.
 Imports:
-    gee (>= 4.13.18),
+    geepack,
     magrittr,
     broom,
     data.table (>= 1.9.4),
