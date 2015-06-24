@@ -12,15 +12,16 @@
 ##' 
 ##' @title Manhattan style plot
 ##' @param data Dataset from a regression with the p-values.
-##' @param x The column in the dataset that contains the independent
+##' @param y The column in the dataset that contains the independent
 ##' variables and/or the interaction variables.  Must be as a
 ##' character/string.
-##' @param y The column that contains the p-value data.  The argument
+##' @param x The column that contains the p-value data.  The argument
 ##' must be a character/string.
 ##' @param groups The column that splits the tests up, usually is the
 ##' dependent variable if the data has been looped through a
 ##' regression test (eg. see \code{\link{loopOutputToListGEE}}).
-##' @param x.axis.label The label for the x-axis.
+##' @param y.axis.label The label for the y-axis.
+##' @export
 ##' @author Luke W. Johnston
 ##' @examples
 ##' 
@@ -49,29 +50,28 @@
 ##'   createCI() %>% 
 ##'   plotManhattanStyle(., 'indep', 'pvalue', groups = '~ dep')
 ##' 
-plotManhattanStyle <- function(data, x, y, groups = NULL,
-                               x.axis.label = 'Exposures') {
+plotManhattanStyle <- function(data, y, x, groups = NULL,
+                               y.axis.label = 'Exposures') {
     ## Uses ggplot2 and dplyr packages
 
     p <- data %>% 
       ## Need to change the variable from y to 'P' to work better with
       ## the visuals of the plot.
-      rename_(P = y, x = x) %>%
+      rename_(P = x, y = y) %>%
       ## -log10(P) is typically used for Manhattan Plots in GWAS.
-      ggplot(., aes(x, -log10(P))) +
+      ggplot(., aes(-log10(P), y)) +
       geom_point() +
       ## Puts a line at the p = 0.05 threshold
-      geom_hline(yintercept = -log10(0.05), linetype = 'dotted') +
+      geom_vline(xintercept = -log10(0.05), linetype = 'dotted') +
       ## Puts a line at the p = 0.01 threshold
-      geom_hline(yintercept = -log10(0.01), linetype = 'dashed') +
+      geom_vline(xintercept = -log10(0.01), linetype = 'dashed') +
       ## Upper limit set at p < 0.001... may need to change.. FIXME
-      coord_cartesian(ylim = c(0, -log10(0.001))) +
-      geom_linerange(aes(x = x, ymin = 0, ymax = -log10(P))) +
+      coord_cartesian(xlim = c(0, -log10(0.001) + 0.25)) +
+      geom_segment(aes(x = 0, xend = -log10(P), y = y, yend = y)) +
       theme_bw() +
-      labs(x = x.axis.label) +
+      labs(y = y.axis.label) +
       theme(legend.position = 'none') +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-      ylab('-log10(P)\nDotted line: P < 0.05\nDashed line: P < 0.01')
+      xlab('-log10(P)\nDotted line: P < 0.05\nDashed line: P < 0.01')
 
       if (!is.null(groups)) {
           p <- p + facet_grid(as.formula(groups))
