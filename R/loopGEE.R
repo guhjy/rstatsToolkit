@@ -12,8 +12,12 @@
 ##' @param covariates The covariate variables.  Can be multiple
 ##' covariates.
 ##' @param interaction A single interaction variable.
+##' @param na.rm Remove missing values from the dataset before running
+##' GEE.  \code{geeglm} can't handle any missingness, so sometimes
+##' it's necessary to remove missingness.
 ##' @inheritParams geepack::geeglm
-##' @inheritParams broom::tidy
+##' @inheritParams broom::lm_tidiers
+##' @export
 ##' @return A dataframe of all the GEE analyses, with estimates,
 ##' confidence intervals, and p-values.
 ##'
@@ -38,7 +42,7 @@
 ##' 
 loopGEE <- function(data, dependent, independent, id, covariates = NULL, interaction = NULL,
                     corstr = 'exchangeable', family = gaussian, conf.int = TRUE,
-                    conf.level = 0.95) {
+                    conf.level = 0.95, na.rm = TRUE) {
     if (length(interaction) > 1) {
         stop("At this time, testing for interactions can only have one variable.")
     }
@@ -58,14 +62,21 @@ loopGEE <- function(data, dependent, independent, id, covariates = NULL, interac
         stop('Covariates and interaction varibles should be quoted variable names.')
     }
 
-    data %>%
+    prep.ds <- data %>%
+      ungroup() %>%
+      select_(.dots = c(dependent, independent, id, covariates)) %>%
       gather_('dep', 'Yvalue', dependent) %>%
       gather_('indep', 'independent', independent) %>%
+      rename_('SID' = id)
+
+    if (na.rm) prep.ds <- na.omit(prep.ds)
+
+    prep.ds %>%
       group_by(dep, indep) %>%
-      rename_('SID' = id) %>%
       do(geepack::geeglm(geeFormula, data = ., id = SID, corstr = corstr,
                     family = family) %>%
            broom::tidy(., conf.int = conf.int, conf.level = conf.level)) %>%
+      ungroup() %>%
       mutate(f.pvalue = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
                             labels = c('<0.001', '<0.01', '<0.05', '>0.05'),
                             ordered_result = TRUE) %>%
