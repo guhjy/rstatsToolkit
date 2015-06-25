@@ -6,7 +6,7 @@
 \usage{
 loopGEE(data, dependent, independent, id, covariates = NULL,
   interaction = NULL, corstr = "exchangeable", family = gaussian,
-  conf.int = TRUE, conf.level = 0.95)
+  conf.int = TRUE, conf.level = 0.95, na.rm = TRUE)
 }
 \arguments{
 \item{data}{Dataset to run GEE on}
@@ -30,6 +30,15 @@ covariates.}
           '"ar1"', '"unstructured"' and '"userdefined"' }
 
 \item{family}{See corresponding documentation to \code{glm}}
+
+\item{conf.int}{whether to include a confidence interval}
+
+\item{conf.level}{confidence level of the interval, used only if
+\code{conf.int=TRUE}}
+
+\item{na.rm}{Remove missing values from the dataset before running
+GEE.  \code{geeglm} can't handle any missingness, so sometimes
+it's necessary to remove missingness.}
 }
 \value{
 A dataframe of all the GEE analyses, with estimates,
