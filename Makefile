@@ -25,7 +25,7 @@ install :
 ## doc_pdf    : Create or update the pdf documentation
 doc_pdf :
 	@R CMD Rd2pdf --no-preview --force --batch \
-		--output=doc/rstatsToolkit.pdf \
+		--output=inst/doc/rstatsToolkit.pdf \
 		$(R_PKG_DIR)/rstatsToolkit
 ##------------------------------------------------------------------
 
