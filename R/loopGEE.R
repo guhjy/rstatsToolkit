@@ -1,7 +1,9 @@
 ##' Loop through each combination of dependent and independent
-##' variables and generate a dataframe of the results.
+##' variables, running a generalized estimating equations model on
+##' each combination, and generate a dataframe of the results.
 ##'
-##' @title Loop through multiple GEE analyses.
+##' @title Loop through multiple generalized estimating equations
+##' (GEE) analyses.
 ##' @param data Dataset to run GEE on
 ##' @param dependent The dependent (aka outcome or response)
 ##' variables.  Must be quoted and can have several.
@@ -15,6 +17,12 @@
 ##' @param na.rm Remove missing values from the dataset before running
 ##' GEE.  \code{geeglm} can't handle any missingness, so sometimes
 ##' it's necessary to remove missingness.
+##' @param filter.indep Logical; Keep only the rows that have the
+##' \code{independent} variables.
+##' @param filter.interact Logical; Keep only the rows that have the
+##' \code{interaction} variable.
+##' @param adjust.p.value Logical; Adjust for multiple comparisons
+##' using the False Discovery Rate.
 ##' @inheritParams geepack::geeglm
 ##' @inheritParams broom::lm_tidiers
 ##' @export
@@ -28,25 +36,57 @@
 ##'
 ##' data(state)
 ##' ds <- data.frame(state.region, state.x77)
-##' loopGEE(ds, c('Income', 'Frost'), c('Population', 'Murder'), 'state.region')
-##' loopGEE(ds, 'Income', 'Population', 'state.region',
-##' covariates = c('Frost', 'Area'))
-##' loopGEE(ds, 'Income', 'Population', 'state.region',
-##' covariates = 'Frost', interaction = 'Frost')
-##' loopGEE(ds, 'Income', 'Population', 'state.region', corstr = 'ar1',
-##' conf.int = FALSE)
+##' names(ds)
+##' outcome <- c('Income', 'Murder')
+##' exposure <- c('Population', 'Life.Exp', 'Illiteracy')
+##' covar <- c('Area', 'Frost')
+##' cid <- 'state.region'
+##' 
+##' loopGEE(ds, outcome, exposure, cid)
+##' loopGEE(ds, outcome, exposure, cid, covariates = covar)
+##' loopGEE(ds, outcome, exposure, cid, covariates = covar, interaction = 'HS.Grad')
+##' loopGEE(ds, outcome, exposure, cid, covariates = covar, interaction = 'Area')
+##' loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', conf.level = 0.99)
+##' loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', conf.int = FALSE)
+##' loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', adjust.p.value = TRUE)
+##' loopGEE(ds, outcome, exposure, cid, covariates = covar, adjust.p.value = TRUE)
+##' loopGEE(ds, outcome, exposure, cid, covariates = covar, adjust.p.value = TRUE,
+##'         filter.indep = TRUE)
+##' loopGEE(ds, outcome, exposure, cid, interaction = 'Area', covariates = covar,
+##'         adjust.p.value = TRUE, filter.interact = TRUE)
 ##'
 ##' @import geepack
 ##' @import tidyr
 ##' @import dplyr
+##' @import broom
 ##' 
-loopGEE <- function(data, dependent, independent, id, covariates = NULL, interaction = NULL,
-                    corstr = 'exchangeable', family = gaussian, conf.int = TRUE,
-                    conf.level = 0.95, na.rm = TRUE) {
-    if (length(interaction) > 1) {
-        stop("At this time, testing for interactions can only have one variable.")
+loopGEE <- function(data,
+                    dependent,
+                    independent,
+                    id,
+                    covariates = NULL,
+                    interaction = NULL,
+                    corstr = 'exchangeable',
+                    family = gaussian,
+                    conf.int = TRUE,
+                    conf.level = 0.95,
+                    na.rm = TRUE,
+                    filter.indep = FALSE,
+                    filter.interact = FALSE,
+                    adjust.p.value = FALSE) {
+
+    ## Test if the interaction input is more than 1 interaction. I
+    ## haven't developed that yet... FIXME
+    if (length(interaction) > 1) stop("At this time, testing for interactions can only have one variable.")
+
+    if (!is.null(interaction)) {
+        if (interaction %in% independent) stop('Interaction term must be also in the covariate list')
+        if (! interaction %in% covariates) stop('Interaction term must be also in the covariate list')
     }
+
+    if (filter.indep & filter.interact) stop('Only one filter can be TRUE')
     
+    ## Create the formulas for the GEE analysis.
     if (is.null(covariates) & is.null(interaction)) {
         geeFormula <- as.formula(paste('Yvalue ~ independent'))
     } else if (is.character(covariates) & is.null(interaction)) {
@@ -62,21 +102,40 @@ loopGEE <- function(data, dependent, independent, id, covariates = NULL, interac
         stop('Covariates and interaction varibles should be quoted variable names.')
     }
 
+    print(geeFormula)
+
+    ## Prepare the dataset for the analysis
     prep.ds <- data %>%
       ungroup() %>%
       select_(.dots = c(dependent, independent, id, covariates)) %>%
       gather_('dep', 'Yvalue', dependent) %>%
       gather_('indep', 'independent', independent) %>%
       rename_('SID' = id)
+    print(head(prep.ds))
 
+    ## Because geeglm doesn't handle missingness, just remove if the option is given.
     if (na.rm) prep.ds <- na.omit(prep.ds)
 
-    prep.ds %>%
+    ## Run the GEE on each of the dep and indep variables
+    gee.ds <- prep.ds %>%
       group_by(dep, indep) %>%
       do(geepack::geeglm(geeFormula, data = ., id = SID, corstr = corstr,
                     family = family) %>%
-           broom::tidy(., conf.int = conf.int, conf.level = conf.level)) %>%
-      ungroup() %>%
+           tidy(., conf.int = conf.int, conf.level = conf.level)) %>%
+      ungroup()
+
+    
+    ## Filter the independent variables dataset if need be.
+    if (filter.indep) gee.ds <- filter(gee.ds, term == 'independent')
+    
+    ## Filter the interaction variables dataset if need be.
+    if (filter.interact) gee.ds <- filter(gee.ds, grepl(':', term))
+
+    ## Make multiple testing comparison corrections, if need be
+    if (adjust.p.value) gee.ds <- mutate(gee.ds, p.value = p.adjust(p.value, 'fdr'))
+
+    ## Create a p.value factor variable and output.
+    gee.ds %>%
       mutate(f.pvalue = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
                             labels = c('<0.001', '<0.01', '<0.05', '>0.05'),
                             ordered_result = TRUE) %>%
