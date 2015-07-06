@@ -61,11 +61,12 @@ plotHeatmapCorr <- function(data, x, y = NULL, x.name.sub, y.name.sub,
           ## If x.name.sub has something assigned to it, this is where
           ## the axis names will be changed to the new format.
           mutate(Var1 = factor(Var1, levels = unique(Var1), labels = x.name.sub),
-                 Var2 = factor(Var2, levels = unique(Var2), labels = x.name.sub)) %>%
+                 Var2 = factor(Var2, levels = rev(unique(Var2)), labels = x.name.sub,
+                               ordered = TRUE)) %>%
           ## This could cause some problems later on... FIXME
           ## Basically, these next two command makes the plot into a
           ## matrix style format.
-          filter(duplicated(value)) %>%
+          filter(duplicated(value, formLast = TRUE)) %>%
           rename(Var2 = Var1, Var1 = Var2) %>%
           mutate(value = round(value, 2))
     } else if (length(y) > 0) {
@@ -136,9 +137,6 @@ plotHeatmap <- function(data, x = 'Var1', y = 'Var2',
             panel.background = element_blank(),
             axis.ticks = element_blank(),
             legend.direction = "vertical") +
-      guides(fill = guide_colorbar(barwidth = 1.5,
-                                   barheight = 10, title.position = "top", 
-                                   title.hjust = 0.5)) +
       labs(x = x.axis.label, y = y.axis.label)
 
     ## Add the correlation values to the plot if TRUE.
