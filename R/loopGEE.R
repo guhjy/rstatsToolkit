@@ -55,11 +55,6 @@
 ##' loopGEE(ds, outcome, exposure, cid, interaction = 'Area', covariates = covar,
 ##'         adjust.p.value = TRUE, filter.interact = TRUE)
 ##'
-##' @import geepack
-##' @import tidyr
-##' @import dplyr
-##' @import broom
-##' 
 loopGEE <- function(data,
                     dependent,
                     independent,
@@ -102,41 +97,38 @@ loopGEE <- function(data,
         stop('Covariates and interaction varibles should be quoted variable names.')
     }
 
-    print(geeFormula)
-
     ## Prepare the dataset for the analysis
     prep.ds <- data %>%
-      ungroup() %>%
-      select_(.dots = c(dependent, independent, id, covariates)) %>%
-      gather_('dep', 'Yvalue', dependent) %>%
-      gather_('indep', 'independent', independent) %>%
-      rename_('SID' = id)
-    print(head(prep.ds))
+      dplyr::ungroup() %>%
+      dplyr::select_(.dots = c(dependent, independent, id, covariates)) %>%
+      tidyr::gather_('dep', 'Yvalue', dependent) %>%
+      tidyr::gather_('indep', 'independent', independent) %>%
+      dplyr::rename_('SID' = id)
 
     ## Because geeglm doesn't handle missingness, just remove if the option is given.
     if (na.rm) prep.ds <- na.omit(prep.ds)
 
     ## Run the GEE on each of the dep and indep variables
     gee.ds <- prep.ds %>%
-      group_by(dep, indep) %>%
-      do(geepack::geeglm(geeFormula, data = ., id = SID, corstr = corstr,
+      dplyr::group_by(dep, indep) %>%
+      dplyr::do(geepack::geeglm(geeFormula, data = ., id = SID, corstr = corstr,
                     family = family) %>%
-           tidy(., conf.int = conf.int, conf.level = conf.level)) %>%
-      ungroup()
+           broom::tidy(., conf.int = conf.int, conf.level = conf.level)) %>%
+      dplyr::ungroup()
 
     
     ## Filter the independent variables dataset if need be.
-    if (filter.indep) gee.ds <- filter(gee.ds, term == 'independent')
+    if (filter.indep) gee.ds <- dplyr::filter(gee.ds, term == 'independent')
     
     ## Filter the interaction variables dataset if need be.
-    if (filter.interact) gee.ds <- filter(gee.ds, grepl(':', term))
+    if (filter.interact) gee.ds <- dplyr::filter(gee.ds, grepl(':', term))
 
     ## Make multiple testing comparison corrections, if need be
-    if (adjust.p.value) gee.ds <- mutate(gee.ds, p.value = p.adjust(p.value, 'fdr'))
+    if (adjust.p.value) gee.ds <- dplyr::mutate(gee.ds, p.value = p.adjust(p.value, 'fdr'))
 
     ## Create a p.value factor variable and output.
     gee.ds %>%
-      mutate(f.pvalue = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+      dplyr::mutate(f.pvalue = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
                             labels = c('<0.001', '<0.01', '<0.05', '>0.05'),
                             ordered_result = TRUE) %>%
                factor(., levels = rev(levels(.))))
