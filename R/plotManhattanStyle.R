@@ -64,16 +64,16 @@ plotManhattanStyle <- function(data, y, x, groups = NULL,
       ## Puts a line at the p = 0.05 threshold
       geom_vline(xintercept = -log10(0.05), linetype = 'dotted') +
       ## Puts a line at the p = 0.01 threshold
-      geom_vline(xintercept = -log10(0.01), linetype = 'dashed') +
+      ##geom_vline(xintercept = -log10(0.01), linetype = 'dotdash') +
       ## Puts a line at the p = 0.001 threshold
-      geom_vline(xintercept = -log10(0.001), linetype = 'dotdash') +
+      geom_vline(xintercept = -log10(0.001), linetype = 'dashed') +
       ## Upper limit set at p < 0.001... may need to change.. FIXME
       coord_cartesian(xlim = c(0, -log10(0.001) + 0.5)) +
       geom_segment(aes(x = 0, xend = -log10(P), y = y, yend = y)) +
       theme_bw() +
       labs(y = y.axis.label) +
       theme(legend.position = 'none') +
-      xlab('-log10(P)\nDotted line: p<0.05\nDashed line: p<0.01\nDot-dashed line: p<0.001')
+      xlab('-log10(P)\nDotted line: p<0.05\nDashed line: p<0.001')
 
       if (!is.null(groups)) {
           p <- p + facet_grid(as.formula(groups))
