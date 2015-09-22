@@ -2,11 +2,13 @@
 % Please edit documentation in R/loopGEE.R
 \name{loopGEE}
 \alias{loopGEE}
-\title{Loop through multiple GEE analyses.}
+\title{Loop through multiple generalized estimating equations
+(GEE) analyses.}
 \usage{
 loopGEE(data, dependent, independent, id, covariates = NULL,
   interaction = NULL, corstr = "exchangeable", family = gaussian,
-  conf.int = TRUE, conf.level = 0.95, na.rm = TRUE)
+  conf.int = TRUE, conf.level = 0.95, na.rm = TRUE,
+  filter.indep = FALSE, filter.interact = FALSE, adjust.p.value = FALSE)
 }
 \arguments{
 \item{data}{Dataset to run GEE on}
@@ -39,6 +41,15 @@ covariates.}
 \item{na.rm}{Remove missing values from the dataset before running
 GEE.  \code{geeglm} can't handle any missingness, so sometimes
 it's necessary to remove missingness.}
+
+\item{filter.indep}{Logical; Keep only the rows that have the
+\code{independent} variables.}
+
+\item{filter.interact}{Logical; Keep only the rows that have the
+\code{interaction} variable.}
+
+\item{adjust.p.value}{Logical; Adjust for multiple comparisons
+using the False Discovery Rate.}
 }
 \value{
 A dataframe of all the GEE analyses, with estimates,
@@ -46,18 +57,30 @@ confidence intervals, and p-values.
 }
 \description{
 Loop through each combination of dependent and independent
-variables and generate a dataframe of the results.
+variables, running a generalized estimating equations model on
+each combination, and generate a dataframe of the results.
 }
 \examples{
 data(state)
 ds <- data.frame(state.region, state.x77)
-loopGEE(ds, c('Income', 'Frost'), c('Population', 'Murder'), 'state.region')
-loopGEE(ds, 'Income', 'Population', 'state.region',
-covariates = c('Frost', 'Area'))
-loopGEE(ds, 'Income', 'Population', 'state.region',
-covariates = 'Frost', interaction = 'Frost')
-loopGEE(ds, 'Income', 'Population', 'state.region', corstr = 'ar1',
-conf.int = FALSE)
+names(ds)
+outcome <- c('Income', 'Murder')
+exposure <- c('Population', 'Life.Exp', 'Illiteracy')
+covar <- c('Area', 'Frost')
+cid <- 'state.region'
+
+loopGEE(ds, outcome, exposure, cid)
+loopGEE(ds, outcome, exposure, cid, covariates = covar)
+loopGEE(ds, outcome, exposure, cid, covariates = covar, interaction = 'HS.Grad')
+loopGEE(ds, outcome, exposure, cid, covariates = covar, interaction = 'Area')
+loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', conf.level = 0.99)
+loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', conf.int = FALSE)
+loopGEE(ds, outcome, exposure, cid, corstr = 'ar1', adjust.p.value = TRUE)
+loopGEE(ds, outcome, exposure, cid, covariates = covar, adjust.p.value = TRUE)
+loopGEE(ds, outcome, exposure, cid, covariates = covar, adjust.p.value = TRUE,
+        filter.indep = TRUE)
+loopGEE(ds, outcome, exposure, cid, interaction = 'Area', covariates = covar,
+        adjust.p.value = TRUE, filter.interact = TRUE)
 }
 \author{
 Luke W. Johnston

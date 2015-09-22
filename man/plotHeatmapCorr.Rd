@@ -36,6 +36,9 @@ heatmap.}
 \item{y.axis.label,ylab}{}
 
 \item{x.axis.label,xlab}{}
+
+\item{corr.text.size}{Size of the text that show the correlation
+values.}
 }
 \description{
 Generate a matrix or non-matrix style heatmap of correlation

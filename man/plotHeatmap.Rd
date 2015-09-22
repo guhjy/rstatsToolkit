@@ -6,7 +6,8 @@
 \usage{
 plotHeatmap(data, x = "Var1", y = "Var2", heat.colours = c("darkorange2",
   "skyblue4"), show.corr.values = TRUE, ylab = y.axis.label,
-  xlab = x.axis.label, y.axis.label = NULL, x.axis.label = NULL)
+  xlab = x.axis.label, y.axis.label = NULL, x.axis.label = NULL,
+  corr.text.size = 5, legend.position = "left")
 }
 \arguments{
 \item{data}{The dataset to plot.}
@@ -29,6 +30,9 @@ heatmap.}
 \item{y.axis.label}{}
 
 \item{x.axis.label}{}
+
+\item{corr.text.size}{Size of the text that show the correlation
+values.}
 }
 \value{
 Heatmap
