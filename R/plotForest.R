@@ -40,8 +40,6 @@
 ##' plotForest(filtered, groups = ' ~ dep')
 ##' plotForest(filtered, pvalue.factor = 'f.pvalue', groups = ' ~ dep')
 ##' }
-##'
-##' @import ggplot2
 ##' 
 plotForest <- function(data, coefficient = 'estimate',
                        y.axis.variables = 'indep',
@@ -57,8 +55,7 @@ plotForest <- function(data, coefficient = 'estimate',
                                 alpha = pvalue.factor),
                      height = 0) +
       geom_vline(xintercept = 0, linetype = 'dashed') +
-      labs(y = y.axis.label, x = x.axis.label) +
-      theme_bw()
+      labs(y = y.axis.label, x = x.axis.label)
 
     ## Change the size of the dot and line based on significance.
     if (!is.null(pvalue.factor)) {
