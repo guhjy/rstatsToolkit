@@ -9,16 +9,17 @@ Description: This package is mainly my personal collection of code that I
     students to use and develop.  Until that point, I am slowly developing this
     package into toolkit for analyzing and exploring data.
 Imports:
+    tidyr,
+    dplyr,
     geepack,
     magrittr,
     broom,
-    data.table (>= 1.9.4),
-    ggplot2 (>= 1.0.0),
-    grid (>= 3.1.1),
-    visreg (>= 2.0.5),
-    reshape2 (>= 1.4),
-    dplyr (>= 0.4.1)
-Depends:
+    ggplot2,
+    grid,
+    visreg
+Depends: 
     R (>= 3.1.1)
 License: Creative Commons 0
 LazyData: true
+Suggests: knitr,
+    rmarkdown
