@@ -15,7 +15,6 @@
 ##' plotSpaghetti(dataset, 'Height', 'Year', 'SubjectID')
 ##' }
 plotSpaghetti <- function(data, y, x, groups = 'SID') {
-    ## Uses ggplot
-    ggplot(data, aes_string(y = y, x = x, group = groups)) +
-        geom_line(position = position_jitter(w = 0.1, h = 0.1))
+    ggplot2::ggplot(data, aes_string(y = y, x = x, group = groups)) +
+        ggplot2::geom_line(position = position_jitter(w = 0.1, h = 0.1))
 }
