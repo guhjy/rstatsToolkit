@@ -25,6 +25,8 @@
 ##' @param print.corr.values Logical; If true, prints the correlation values.
 ##' @param y.axis.label,ylab 
 ##' @param x.axis.label,xlab
+##' @param corr.text.size Size of the text that show the correlation
+##' values.
 ##' @export
 ##' @author Luke W. Johnston
 ##' @examples
@@ -108,7 +110,9 @@ plotHeatmap <- function(data, x = 'Var1', y = 'Var2',
                         ylab = y.axis.label,
                         xlab = x.axis.label, 
                         y.axis.label = NULL,
-                        x.axis.label = NULL) {
+                        x.axis.label = NULL,
+                        corr.text.size = 5,
+                        legend.position = "left") {
     ## This function uses dplyr, ggplot2, and reshape2 packages.
 
     if ( !is.null(ylab) | !is.null(xlab) ) {
@@ -136,12 +140,13 @@ plotHeatmap <- function(data, x = 'Var1', y = 'Var2',
             panel.border = element_rect(colour = 'black', fill = NA),
             panel.background = element_blank(),
             axis.ticks = element_blank(),
-            legend.direction = "vertical") +
+            #legend.direction = "vertical",
+            legend.position = legend.position) +
       labs(x = x.axis.label, y = y.axis.label)
 
     ## Add the correlation values to the plot if TRUE.
     if (show.corr.values == TRUE) {
-        p <- p + geom_text(aes(label = value), color = "#073642")
+        p <- p + geom_text(aes(label = value), color = "#073642", size = corr.text.size)
     }
 
     return(p)
