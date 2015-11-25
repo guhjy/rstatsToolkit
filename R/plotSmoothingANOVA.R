@@ -5,7 +5,7 @@
 ##' Generally I use this for plotting longitudinal data, where the
 ##' x-axis is the timepoints and the ANOVA is testing the significance
 ##' across time (which may be arguably inappropriate... FIXME).
-##' 
+##'
 ##' @title Smoothing line plot, with ANOVA
 ##' @param data Dataset with the variables of interest.
 ##' @param x The factor variable on the x-axis.  Generally is the time
@@ -26,7 +26,7 @@
 ##'       quantile(., c(0, .333, .666, 1), na.rm = TRUE) %>%
 ##'       cut(Population, ., include.lowest = TRUE)) %>%
 ##'   plotSmoothingANOVA(., 'f.Pop', 'Illiteracy', id = 'state.region')
-##' 
+##'
 plotSmoothingANOVA <- function(data, x, y, id, y.axis.limits = c(0.20, 0.80)) {
     ## Uses dplyr, ggplot2, and broom packages.
 
@@ -47,10 +47,10 @@ plotSmoothingANOVA <- function(data, x, y, id, y.axis.limits = c(0.20, 0.80)) {
                                quantile(data[[y]], y.axis.limits[2], na.rm = TRUE))) +
       annotate('text', label =
                  data %>%
-                 select(contains(y), contains(x)) %>% 
+                 select(contains(y), contains(x)) %>%
                  aov(paste(y, paste('as.factor(', x, ')', sep = ''), sep = '~') %>%
                        as.formula(), data = .) %>%
-                 tidy() %>%
+                 broom::tidy() %>%
                  head(1)['p.value'] %>%
                  round(3) %>%
                  { ifelse(. < 0.001, paste0('p < 0.001'), paste0('p = ', .)) },

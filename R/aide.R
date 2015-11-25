@@ -67,3 +67,5 @@ aide.tertile <- function(x) {
     cut(x, quantile(x, c(0, .333, .666, 1), na.rm = TRUE),
         include.lowest = TRUE)
 }
+
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
